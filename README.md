@@ -3,7 +3,7 @@
 ## Intro
 Hi there, and welcome to my fitness tracker! Here, you'll be able to write yourself an exercise plan, jump in where you left off, and reach your fitness goals in no time!
 
-![screenshot](https://github.com/jrostirolla/workout-tracker/blob/main/untitled.jpg?raw=true)
+![screenshot](https://github.com/jrostirolla/workout-tracker/blob/main/untitled.png?raw=true)
 
 ## Technologies
 This application uses the following technologies:
