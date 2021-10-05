@@ -14,19 +14,33 @@ router.get('/api/workouts', (req, res) => {
 });
 
 //TODO: Route for adding exercise (/api/workouts/ID)
-router.put('/api/workouts/:id', ({ body }, res) => {
-    Workout.create(body)
-    .then(dbWorkout => {
-        res.json(dbWorkout);
+router.put('/api/workouts/:id', (req, res) => {
+    Workout.findAndModify({ 
+        query: { _id: req.params._id },
+        update: { 
+            type: req.params.type,
+            name: req.params.name,
+            duration: req.params.duration,
+            weight: req.params.weight,
+            reps: req.params.reps,
+            sets: req.params.sets,
+            distance: req.params.distance,
+        },
     })
+    // .then(req.body => {
+    //     Workout.create(req.body)
+    // })
+    // Workout.create(req.body)
+    // .then(dbWorkout => {
+    //     res.json(dbWorkout);
     .catch(err => {
         res.status(400).json(err);
     });
 });
 
 //TODO: Route for creating workouts (api/workouts)
-router.post('/api/workouts/', ({ body }, res) => {
-    Workout.create(body)
+router.post('/api/workouts/', (req, res) => {
+    Workout.create(req.body)
     .then(dbWorkout => {
         res.json(dbWorkout);
     })
