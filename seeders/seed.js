@@ -1,12 +1,13 @@
 const mongoose = require('mongoose');
 const Workout = require('../models/exercises');
+const MongoClient = require('mongodb').MongoClient;
 
-mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
-    useNewUrlParser: true,
-    useFindAndModify: false,
-    useUnifiedTopology: true,
-    useCreateIndex: true,
-});
+// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
+//     useNewUrlParser: true,
+//     useFindAndModify: false,
+//     useUnifiedTopology: true,
+//     useCreateIndex: true,
+// });
 
 
 const workoutSeed = [
@@ -127,13 +128,46 @@ const workoutSeed = [
   },
 ];
 
-Workout.deleteMany({})
-  .then(() => Workout.collection.insertMany(workoutSeed))
-  .then((data) => {
-    console.log(data.result.n + ' records inserted!');
-    process.exit(0);
-  })
-  .catch((err) => {
-    console.error(err);
-    process.exit(1);
-  });
+async function seeder() {
+
+const uri = "mongodb+srv://admin:Surveyor!47@cluster0.x3c7v.mongodb.net/workout?retryWrites=true&w=majority"
+const client = new MongoClient(uri, {
+  useNewUrlParser: true,
+  // useFindAndModify: false,
+  useUnifiedTopology: true,
+  // useCreateIndex: true,
+})
+
+// mongoose.connect(process.env.MONGODB_URI || "mongodb://localhost/workout", {
+//     useNewUrlParser: true,
+//     useFindAndModify: false,
+//     useUnifiedTopology: true,
+//     useCreateIndex: true,
+// });
+
+try {
+  await client.connect();
+  console.log('User connected to server');
+  const collection = await client.db("workout").collection("workouts");
+  await collection.deleteMany();
+  console.log("Database reset")
+  await collection.insertMany(workoutSeed);
+  console.log("Database seeded successfully");
+  client.close;
+} catch(err){
+  console.log(err.stack);
+}
+
+// Workout.deleteMany({})
+//   .then(() => Workout.collection.insertMany(workoutSeed))
+//   .then((data) => {
+//     console.log(data.result.n + ' records inserted!');
+//     process.exit(0);
+//   })
+//   .catch((err) => {
+//     console.error(err);
+//     process.exit(1);
+//   });
+}
+
+seeder();
